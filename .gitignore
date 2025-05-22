@@ -32,6 +32,15 @@ yarn-error.*
 
 # local env files
 .env*.local
+expo-env.d.ts
 
 # typescript
 *.tsbuildinfo
+
+# Ignore Firebase configuration files (Android)
+google-services.json
+android/app/google-services.json
+
+# Ignore Firebase configuration files (iOS)
+GoogleService-Info.plist
+ios/app/GoogleService-Info.plist
