@@ -6,7 +6,9 @@
 import { Text as DefaultText, View as DefaultView } from 'react-native';
 
 import Colors from '@/constants/Colors';
-import { useColorScheme } from './useColorScheme';
+export function useColorScheme(): 'light' | 'dark' {
+  return 'dark';
+}
 
 type ThemeProps = {
   lightColor?: string;

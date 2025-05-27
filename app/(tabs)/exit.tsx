@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet, Button, Pressable, Image } from 'react-native';
 import { signOut } from '../../services/user-service'
 import { useRouter } from 'expo-router';
+import Colors from '@/constants/Colors';
 
 export default function Tab() {
 
@@ -17,14 +18,25 @@ export default function Tab() {
     // if (!usr) {
     //   // exit app
     // }
+    // const router = useRouter();
+    // router.navigate('/');
     const router = useRouter();
-    router.navigate('/');
+    // router.navigate('/(tabs)', { withAnchor: true });
+    router.replace('/');
   }
 
   return (
     <View style={styles.container}>
-      <Text>TODO...</Text>
-      <Button title="Sair" onPress={() => handleExit()} />
+      <Text style={styles.texto}>Deseja sair da conta?</Text>
+      <Pressable
+        style={({ pressed }) => [
+          styles.botao,
+          pressed && styles.buttonPressed, // efeito ao pressionar
+        ]}
+        onPress={() => handleExit()}
+      >
+        <Text style={styles.buttonText}>Sair</Text>
+      </Pressable>
     </View>
   );
 }
@@ -34,5 +46,28 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'black'
+  },
+  texto: {
+    color: Colors.yellow,
+    fontSize: 30,
+  },
+  botao: {
+    minWidth: 200,
+    width: '65%',
+    backgroundColor: Colors.yellow,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  buttonPressed: {
+    backgroundColor: Colors.gray,
+  },
+  buttonText: {
+    color: 'black',
+    fontWeight: '700',
+    fontSize: 18,
   },
 });

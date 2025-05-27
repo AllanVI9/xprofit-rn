@@ -6,7 +6,7 @@ const signUp = async (email: string, password: string): Promise<User | null> => 
   try {
     const userCredential: UserCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    alert('User created!');
+    alert('Usuário Criado!');
     var u: User = { id: user.uid, name: user.displayName!, email: user.email! };
     return u;
   } catch (error: any) {
@@ -19,7 +19,7 @@ const signIn = async (email: string, password: string): Promise<User | null> => 
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    alert('User signed in!');
+    alert('Usuário Logado!');
     var u: User = { id: user.uid, name: user.displayName!, email: user.email! };
     return u;
   } catch (error: any) {
@@ -31,7 +31,7 @@ const signIn = async (email: string, password: string): Promise<User | null> => 
 const signOut = async (): Promise<boolean> => {
   try {
     await auth.signOut();
-    alert('User signed out!');
+    alert('Usuário Deslogado!');
     return true;
   } catch (error: any) {
     alert(error.message);
