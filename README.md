@@ -7,4 +7,4 @@
 *Lourenzo Ramos - RM 99951*
 
 
-**Para o projeto funcionar é necessário o .env arquivo de configuração do firebase*
+**Para o projeto funcionar é necessário o .env arquivo de configuração do firebase**
