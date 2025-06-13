@@ -6,8 +6,9 @@ const signUp = async (email: string, password: string): Promise<User | null> => 
   try {
     const userCredential: UserCredential = await createUserWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    alert('Usuário Criado!');
-    var u: User = { id: user.uid, name: user.displayName!, email: user.email! };
+    alert('Usuário criado com sucesso!');
+    // var u: User = { id: user.uid, name: user.displayName!, email: user.email! };
+    var u: User = { id: user.uid, email: user.email! };
     return u;
   } catch (error: any) {
     alert(error.message);
@@ -19,8 +20,8 @@ const signIn = async (email: string, password: string): Promise<User | null> => 
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    alert('Usuário Logado!');
-    var u: User = { id: user.uid, name: user.displayName!, email: user.email! };
+    // var u: User = { id: user.uid, name: user.displayName!, email: user.email! };
+    var u: User = { id: user.uid, email: user.email! };
     return u;
   } catch (error: any) {
     alert(error.message);
@@ -31,7 +32,7 @@ const signIn = async (email: string, password: string): Promise<User | null> => 
 const signOut = async (): Promise<boolean> => {
   try {
     await auth.signOut();
-    alert('Usuário Deslogado!');
+    alert('Usuário deslogado!');
     return true;
   } catch (error: any) {
     alert(error.message);

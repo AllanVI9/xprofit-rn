@@ -1,43 +1,90 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
-// import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Dimensions, Pressable } from 'react-native';
-// import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Ionicons from '@expo/vector-icons/Ionicons';
-// import { Icon } from 'react-native-elements'
-// import EditScreenInfo from '@/components/EditScreenInfo';
 import { View, Text } from '@/components/Themed';
 import ProfileCard from '@/components/ProfileCard';
-// import { signUp, signIn, signOut } from '../../services/user-service'
-// import { User } from '../../services/user-interface';
 import Colors from '../../constants/Colors';
+import useQuestionContext from '../context/question';
+import { ProfileTypes, Question } from '@/services/question-interface';
+import { FirestoreService } from '@/services/firestore-service';
+import useUserContext from '../context/user';
+import { Loader } from '@/components/Loader';
 
 export default function TabOneScreen() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [profile, setProfile] = useState('');
   const [color, setColor] = useState('#ffbe0c'); // cor inicial
   const router = useRouter();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setColor((prev) => (prev === '#ffbe0c' ? '#ff0000' : '#ffbe0c'));
-    }, 500); // troca a cada 500ms
+  const { user } = useUserContext();
+  const { question } = useQuestionContext();
 
-    return () => clearInterval(interval); // limpa o intervalo quando desmontar
-  }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user == null) {
+        console.log('Usuário inexistente!');
+        return;
+      }
+      try {
+        await getQuestion(user.id);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, [question]);
+
+  const getQuestion = async (userId: string) => {
+    setIsLoading(true);
+    let serviceQuestions: Question | null = question;
+    try {
+      if (serviceQuestions == null) {
+        const questionService = new FirestoreService<Question>('questions');
+        serviceQuestions = await questionService.read(userId);
+      }
+      console.log('==> RESULT2:', serviceQuestions);
+      if (serviceQuestions != null) {
+        // Seu Perfil
+        setProfile(serviceQuestions.profile ? serviceQuestions.profile : ProfileTypes.Conservative)
+      }
+      // Setando cor do perfil
+      if (serviceQuestions != null) {
+        switch (serviceQuestions.profile) {
+          case ProfileTypes.Conservative:
+            setColor(Colors.green)
+            break;
+          case ProfileTypes.Moderate:
+            setColor(Colors.yellow)
+            break;
+          case ProfileTypes.Aggressive:
+            setColor(Colors.red)
+            break;
+          default:
+            break;
+        }
+      }
+    } catch (error) {
+      console.log('==> Error:', error);
+    }
+    setIsLoading(false);
+  }
+
   return (
     <View style={styles.container} >
+      {isLoading && <Loader />}
       <View style={styles.header}>
         <Ionicons style={styles.icon} name="person" size={100} color={'white'} />
         <View style={styles.headerperfil}>
           <View style={styles.perfil}>
-            <Text style={styles.titleperfil}>Seu Perfil: <Text style={styles.moderado}>Moderado</Text></Text>
+            <Text style={styles.titleperfil}>Seu Perfil: <Text style={{ color: color }}>{profile}</Text></Text>
           </View>
           <Pressable
             style={({ pressed }) => [
               styles.botao,
-              pressed && styles.buttonPressed, // efeito ao pressionar
+              pressed && styles.buttonPressed
             ]}
-            onPress={() => router.push('/detalhes')}
-
+            onPress={() => router.push('/details')}
           >
             <Text style={styles.buttonText}>Detalhes</Text>
           </Pressable>
@@ -45,21 +92,18 @@ export default function TabOneScreen() {
       </View>
       <View style={styles.perfil}>
         <Text style={styles.title}>Tipos de Perfil Investidor</Text>
-
         <ProfileCard
           title="Conservador"
           description="Se você prefere investir em produtos de baixo risco e ganhar menos, mas ganhar sempre, isso indica que você tem um perfil conservador."
           color={color}
           imageSource={require('../../assets/images/pig.png')}
         />
-
         <ProfileCard
           title="Moderado"
           description="Não abre mão de segurança na hora de investir , mas está aberto a maiores riscos para obter melhor rentabilidade , isso indica que você tem perfil moderado."
           color={color}
           imageSource={require('../../assets/images/balance.png')}
         />
-
         <ProfileCard
           title="Agressivo"
           description="Deseja assumir riscos mais altos na busca de uma rentabilidade mais expressiva, o seu perfil pode ser agressivo."
@@ -88,9 +132,8 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   },
   headerperfil: {
-    // flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end', // move tudo para a direita
+    justifyContent: 'flex-end'
   },
   botao: {
     minWidth: 200,
@@ -123,7 +166,6 @@ const styles = StyleSheet.create({
   },
   perfil: {
     alignItems: 'center',
-    // justifyContent: 'flex-start',
     backgroundColor: 'black',
   },
   icon: {
@@ -131,13 +173,5 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.card,
     borderRadius: 8,
     marginRight: 6,
-  },
-  // separator: {
-  //   marginVertical: 30,
-  //   height: 1,
-  //   width: '80%'
-  // },
-  moderado: {
-    color: Colors.yellow,
   },
 });

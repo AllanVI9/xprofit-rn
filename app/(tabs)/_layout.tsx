@@ -36,7 +36,7 @@ export default function TabLayout() {
           title: 'Home',
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
           headerRight: () => (
-            <Link href="/modal" asChild>
+            <Link href="/about" asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
@@ -62,6 +62,7 @@ export default function TabLayout() {
         name="exit"
         options={{
           title: 'Sair',
+          headerShown: false,
           tabBarIcon: ({ color }) => <TabBarIcon name="close" color={color} />,
         }}
       />

@@ -3,10 +3,13 @@ import { View, Text, StyleSheet, Button, Pressable, Image } from 'react-native';
 import { signOut } from '../../services/user-service'
 import { useRouter } from 'expo-router';
 import Colors from '@/constants/Colors';
+import { useUserContext } from '../context/user';
+import useQuestionContext from '../context/question';
 
 export default function Tab() {
 
-  // const [shouldExit, setShouldExit] = useState<boolean>(false);
+  const { setUser } = useUserContext();
+  const { setQuestion } = useQuestionContext();
 
   useEffect(() => {
     // TODO: Incluir o texto se deseja sair e se sim chamar a funcão do
@@ -14,15 +17,12 @@ export default function Tab() {
   }, []);
 
   const handleExit = async () => {
-    // const usr = await signOut();
-    // if (!usr) {
-    //   // exit app
-    // }
-    // const router = useRouter();
-    // router.navigate('/');
+    // Zerando Contexto das Questions
+    setQuestion(null);
+    // Zerando Contexto do Usuário
+    setUser(null);
     const router = useRouter();
-    // router.navigate('/(tabs)', { withAnchor: true });
-    router.replace('/');
+    router.replace('/(auth)');
   }
 
   return (

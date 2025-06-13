@@ -18,7 +18,6 @@ type InvestorProfileCardProps = {
 export default function InvestorProfileCard({
   title,
   description,
-  color,
   imageSource,
   style,
 }: InvestorProfileCardProps) {
