@@ -10,6 +10,16 @@
 
 *Giuliano Romaneto Marques - Rm99694*
 
+
+**Ideia do Projeto:**
+
+*Aplicativo de guia de investimento usando firebase para guardar dados dos usuários, vai ser feito a recomendação dos investimentos conforme as respostas de cada usuário e seu nível de perfil*
+
+**Clone o projeto e após a adição do .env instale as dependências e rode no emulador.**
+
+    npx expo install
+    npx expo start
+
 ***Para o projeto funcionar é necessário o .env no projeto (arquivo de configuração do firebase), estará no chat do teams e na entrega do teams!***
 
 **Link Para o Figma:**
